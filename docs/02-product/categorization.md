@@ -1,14 +1,14 @@
-# Catégorisation automatique
+# Catégorisation
 
-## v7
+## v8
 
-La catégorisation combine désormais :
+Les suggestions de règles peuvent être appliquées via API.
 
-- règles déterministes ;
-- correction manuelle ;
-- historique d'enrichissement ;
-- suggestion de règle.
+Flux :
 
-## Principe
-
-Une correction utilisateur ne modifie pas seulement la transaction : elle nourrit l'apprentissage futur.
+```mermaid
+flowchart TD
+    A[Correction manuelle] --> B[Suggestion]
+    B --> C[Application suggestion]
+    C --> D[Création règle]
+```

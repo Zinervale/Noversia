@@ -1,17 +1,17 @@
 # Noversia Platform
 
-## v7 — Manual Category Correction
+## v8 — Merchant Detection and Rule Suggestions
 
-Cette version ajoute la correction manuelle de catégorie et l'historique d'enrichissement.
+Cette version ajoute les marchands et transforme les suggestions en règles.
 
 ## Nouveautés
 
-- Endpoint `PATCH /api/v1/transactions/{id}/category`.
-- Table `transaction_enrichments`.
-- Historique des corrections de catégorie.
-- Détection de suggestion de règle après correction.
-- Endpoint `GET /api/v1/rule-suggestions`.
-- Documentation produit/technique mise à jour.
+- Détection simple du marchand à partir du libellé.
+- Normalisation du nom marchand.
+- Création automatique/réutilisation du marchand pendant l'import.
+- Ajout du `merchant_id` sur les transactions importées.
+- Endpoint `POST /api/v1/rule-suggestions/apply`.
+- Documentation marchands et règles enrichie.
 
 ## Lancement
 
@@ -19,12 +19,4 @@ Cette version ajoute la correction manuelle de catégorie et l'historique d'enri
 cp .env.example .env
 docker compose up -d
 make api
-```
-
-## Exemple correction catégorie
-
-```bash
-curl -X PATCH http://localhost:8080/api/v1/transactions/<id>/category \
-  -H "Content-Type: application/json" \
-  -d '{"categoryId":"<category-id>","reason":"manual_correction"}'
 ```

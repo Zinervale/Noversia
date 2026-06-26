@@ -1,21 +1,22 @@
 # Changelog
 
-## v7 — Manual Category Correction
+## v8 — Merchant Detection and Rule Suggestions
 
 ### Ajouté
 
-- Correction manuelle d'une catégorie transaction.
-- Historique `transaction_enrichments`.
-- Endpoint de suggestion de règle.
-- Documentation de correction et apprentissage.
+- Détection marchand par normalisation du libellé.
+- Persistance/réutilisation des marchands.
+- Transactions enrichies avec `merchant_id`.
+- Endpoint d'application d'une suggestion en règle.
+- Documentation marchand.
 
 ### Modifié
 
-- OpenAPI passe en v0.8.
-- Roadmap enrichie sur apprentissage progressif.
+- OpenAPI passe en v0.9.
+- Le modèle de données marchand est documenté.
 
 ### Prochaine étape
 
-- Création d'une règle depuis une suggestion.
-- Détection marchand.
-- Normalisation des libellés.
+- Dashboard financier minimal.
+- Agrégats dépenses par catégorie.
+- Agrégats dépenses par marchand.

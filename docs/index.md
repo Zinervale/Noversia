@@ -1,5 +1,5 @@
 # Noversia Platform
 
-Version v7 — Manual Category Correction.
+Version v8 — Merchant Detection and Rule Suggestions.
 
-Cette version ajoute la capacité essentielle : l'utilisateur peut corriger une catégorie et le système conserve l'historique.
+Cette version ajoute un enrichissement clé : l'identification du marchand.

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS categorization_rules (
 CREATE TABLE IF NOT EXISTS merchants (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    normalized_name TEXT NOT NULL,
+    normalized_name TEXT NOT NULL UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -88,17 +88,6 @@ CREATE TABLE IF NOT EXISTS import_rows (
     raw_data JSONB NOT NULL DEFAULT '{}',
     errors JSONB NOT NULL DEFAULT '[]',
     transaction_id UUID REFERENCES transactions(id),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS recommendations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    title TEXT NOT NULL,
-    description TEXT NOT NULL,
-    impact_amount NUMERIC(18,2),
-    confidence_score NUMERIC(5,2) NOT NULL DEFAULT 0,
-    status TEXT NOT NULL DEFAULT 'pending',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

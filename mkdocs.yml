@@ -5,8 +5,8 @@ theme:
 nav:
   - Accueil: docs/index.md
   - Produit:
+      - Marchands: docs/02-product/merchants.md
       - Catégorisation: docs/02-product/categorization.md
-      - Correction catégorie: docs/02-product/category-correction.md
   - Architecture:
       - Module Transactions: docs/05-architecture/transactions-module.md
   - Données:

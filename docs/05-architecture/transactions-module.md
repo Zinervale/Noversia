@@ -1,17 +1,19 @@
 # Module Transactions
 
-## v7
+## v8
 
-Nouveaux comportements :
+Nouveaux composants logiques :
 
-- correction de catégorie ;
-- création d'un événement d'enrichissement ;
-- suggestion de règle.
+- Détection marchand.
+- Upsert marchand.
+- Application de suggestion de règle.
 
-## Couches
+## Flux import
 
-- Handler HTTP
-- Service
-- Repository
-- Parser CSV
-- Categorizer
+```mermaid
+flowchart TD
+    A[CSV] --> B[Parsing]
+    B --> C[Catégorisation]
+    C --> D[Détection marchand]
+    D --> E[Persistance]
+```

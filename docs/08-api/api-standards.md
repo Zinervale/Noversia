@@ -1,6 +1,6 @@
 # Standards API
 
-Routes ajoutées en v7 :
+Routes ajoutées/modifiées en v8 :
 
-- `PATCH /api/v1/transactions/{id}/category`
 - `GET /api/v1/rule-suggestions`
+- `POST /api/v1/rule-suggestions/apply`

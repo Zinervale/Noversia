@@ -6,6 +6,8 @@ type Transaction struct {
 	Amount float64 `json:"amount"`
 	Currency string `json:"currency"`
 	Date string `json:"date"`
+	MerchantID string `json:"merchantId,omitempty"`
+	MerchantName string `json:"merchantName,omitempty"`
 	CategoryID string `json:"categoryId,omitempty"`
 	CategoryName string `json:"categoryName,omitempty"`
 }
@@ -31,10 +33,13 @@ type RuleSuggestion struct {
 	Reason string `json:"reason"`
 }
 
-type UpdateCategoryRequest struct {
+type ApplyRuleSuggestionRequest struct {
+	Pattern string `json:"pattern"`
 	CategoryID string `json:"categoryId"`
-	Reason string `json:"reason"`
+	Priority int `json:"priority"`
 }
+
+type UpdateCategoryRequest struct { CategoryID string `json:"categoryId"`; Reason string `json:"reason"` }
 
 type ImportRowResult struct {
 	Line int `json:"line"`
@@ -43,6 +48,8 @@ type ImportRowResult struct {
 	Label string `json:"label,omitempty"`
 	Amount float64 `json:"amount,omitempty"`
 	Currency string `json:"currency,omitempty"`
+	MerchantID string `json:"merchantId,omitempty"`
+	MerchantName string `json:"merchantName,omitempty"`
 	CategoryID string `json:"categoryId,omitempty"`
 	CategoryName string `json:"categoryName,omitempty"`
 	ConfidenceScore float64 `json:"confidenceScore,omitempty"`

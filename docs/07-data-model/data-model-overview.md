@@ -1,20 +1,16 @@
-# Modèle de données v7
+# Modèle de données v8
 
-## Nouvelle table
+## Merchants
 
-### transaction_enrichments
+La table `merchants` stocke :
 
-Historise les changements apportés à une transaction.
+- nom affiché ;
+- nom normalisé.
 
-Colonnes :
-- transaction_id
-- enrichment_type
-- previous_value
-- new_value
-- source
-- reason
-- created_at
+## Transactions
 
-## Objectif
+Les transactions peuvent maintenant pointer vers un marchand via `merchant_id`.
 
-Garantir la traçabilité des corrections et préparer l'apprentissage.
+## Suggestions
+
+Les suggestions de règles restent calculées dynamiquement à partir des corrections manuelles.
