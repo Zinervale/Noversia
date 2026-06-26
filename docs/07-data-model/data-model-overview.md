@@ -1,7 +1,15 @@
 # Modèle de données initial
 
-## Agrégats principaux
-User, Household, Account, FinancialInstitution, Transaction, Merchant, Category, Rule, Budget, Envelope, Goal, Asset, Liability, Recommendation, Decision, Simulation, Scenario, Forecast, Alert, AuditLog.
+## Tables v1
+
+- users
+- accounts
+- transactions
+- categories
+- merchants
+- recommendations
+- audit_logs
 
 ## Principe
-Les transactions brutes ne sont jamais modifiées. Les enrichissements sont stockés séparément.
+
+Les transactions brutes sont conservées. Les enrichissements sont séparés pour assurer la traçabilité.

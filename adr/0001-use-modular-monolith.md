@@ -1,10 +1,5 @@
-# ADR 0001 — Utiliser un monolithe modulaire
+# ADR 0001 — Monolithe modulaire
 
-## Statut
-Accepté
+Statut : Accepté
 
-## Décision
-Le backend principal démarre sous forme de monolithe modulaire.
-
-## Justification
-Développement rapide, transactions simples, déploiement simplifié, coût réduit.
+Le backend principal démarre sous forme de monolithe modulaire afin de livrer rapidement sans complexité microservices prématurée.

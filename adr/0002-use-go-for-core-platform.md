@@ -1,6 +1,5 @@
-# ADR 0002 — Utiliser Go pour Core Platform
+# ADR 0002 — Go pour Core Platform
 
-## Statut
-Accepté
+Statut : Accepté
 
-Go est retenu pour le backend métier principal : simplicité, performances, déploiement facile.
+Go est retenu pour le backend métier pour sa simplicité, ses performances et sa facilité de déploiement.

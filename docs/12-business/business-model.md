@@ -1,10 +1,15 @@
 # Modèle économique initial
 
 ## B2C
-Gratuit, Premium, Family, Wealth.
+
+- Gratuit : import manuel et budget simple
+- Premium : IA, recommandations, simulations
+- Family : foyer, comptes partagés, objectifs familiaux
+- Wealth : patrimoine et scénarios avancés
 
 ## B2B futur
-API Decision Engine, marque blanche, intégration banque, intégration conseiller patrimonial.
 
-## Principe
-Le produit doit démontrer un ROI utilisateur supérieur au prix de l’abonnement.
+- API Decision Engine
+- Marque blanche
+- Intégration banque
+- Intégration conseiller patrimonial

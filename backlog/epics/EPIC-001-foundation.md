@@ -1,3 +1,21 @@
 # EPIC-001 — Fondation technique
 
-Créer les fondations du projet Noversia Platform : dépôt, docs, Docker, API skeleton, AI skeleton, PostgreSQL, Redis, Neo4j.
+## Objectif
+
+Créer une base projet exploitable par une équipe de développement.
+
+## Statut
+
+En cours
+
+## Features
+
+- Structure dépôt
+- Documentation
+- Docker Compose
+- Backend Go skeleton
+- Service IA Python skeleton
+- PostgreSQL
+- Redis
+- Neo4j
+- OpenAPI initiale

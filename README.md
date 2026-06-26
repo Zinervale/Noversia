@@ -1,51 +1,45 @@
 # Noversia Platform
 
-Noversia Platform est une plateforme d'intelligence financière personnelle.
+Plateforme d'intelligence financière personnelle.
 
-Objectif : construire un moteur de décision financière capable d'analyser les données bancaires, patrimoniales et comportementales d'un utilisateur pour produire des recommandations explicables, traçables et utiles.
+## Objectif
 
-## Produits
+Construire un moteur de décision financière capable de :
+- centraliser des données financières ;
+- analyser les transactions ;
+- produire des recommandations explicables ;
+- simuler des décisions de vie ;
+- dialoguer avec l'utilisateur via une IA maîtrisée.
 
-- **Noversia Financial** : application grand public.
-- **Noversia Core** : moteur financier.
-- **Noversia Intelligence** : moteur IA.
-- **Noversia Decision Engine** : moteur de recommandations et simulations.
-- **Noversia API** : API publique et privée.
+## Stack v1
+
+- Backend Core : Go
+- Service IA : Python / FastAPI
+- Base métier : PostgreSQL
+- Cache : Redis
+- Graphe : Neo4j
+- Documentation : MkDocs
+- API : REST + OpenAPI
+
+## Lancement local
+
+```bash
+cp .env.example .env
+docker compose up -d
+make api
+make ai
+```
 
 ## Structure
 
 ```text
-apps/              Applications clientes
-services/          Services backend
-packages/          Bibliothèques partagées
-docs/              Documentation produit et technique
-adr/               Architecture Decision Records
-openapi/           Contrats API
-backlog/           Epics, features, user stories
-diagrams/          Diagrammes C4, Mermaid, UML
-infra/             Docker, Kubernetes, IaC
-scripts/           Scripts de développement
+apps/          Applications clientes
+services/      Services backend et IA
+packages/      Librairies partagées
+docs/          Documentation projet
+adr/           Décisions d'architecture
+openapi/       Contrats API
+backlog/       Backlog produit
+infra/         Infrastructure
+scripts/       Scripts de développement
 ```
-
-## Décisions initiales
-
-- Backend principal : Go
-- Service IA : Python
-- Base métier : PostgreSQL
-- Cache : Redis
-- Graphe financier : Neo4j
-- API publique : REST + OpenAPI
-- Interne : monolithe modulaire au départ
-- Open Banking : couche d'abstraction multi-fournisseurs
-- IA : couche d'abstraction multi-LLM
-
-## Commandes futures
-
-```bash
-docker compose up
-make test
-make lint
-make docs
-```
-
-Ce dépôt est une v0 documentaire et structurelle. Le code applicatif sera ajouté progressivement.

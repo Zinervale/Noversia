@@ -1,18 +1,17 @@
 # Standards API
 
-API REST versionnée : `/api/v1`.
-
-## Erreur standard
+## Format erreur
 
 ```json
 {
   "error": {
-    "code": "TRANSACTION_NOT_FOUND",
-    "message": "Transaction introuvable",
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "Ressource introuvable",
     "correlationId": "..."
   }
 }
 ```
 
-## Sécurité
-OAuth2 / OIDC, JWT court terme, refresh token rotatif, scopes API, rate limiting, audit.
+## Versionnement
+
+Toutes les routes publiques sont sous `/api/v1`.

@@ -1,6 +1,5 @@
-# ADR 0003 — Utiliser Python pour le service IA
+# ADR 0003 — Python pour le service IA
 
-## Statut
-Accepté
+Statut : Accepté
 
-Python est retenu pour les composants IA grâce à son écosystème LLM/ML.
+Python est retenu pour l'IA afin de bénéficier de l'écosystème LLM/ML.

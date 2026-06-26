@@ -1,13 +1,15 @@
-# Catalogue fonctionnel initial
+# Fonctionnalités initiales
 
-## Comptes
-Ajouter un compte manuel, importer un historique CSV, synchroniser via Open Banking, voir le solde consolidé.
+## Backend
 
-## Transactions
-Importer, nettoyer les libellés, identifier le marchand, catégoriser, corriger, créer une règle.
-
-## Budget
-Créer une enveloppe, calculer un budget conseillé, suivre la consommation, alerter.
+- Health check
+- Liste des comptes
+- Création compte manuel
+- Liste des transactions
+- Liste des recommandations
 
 ## IA
-Résumer le mois, expliquer une variation, répondre à une question, proposer une action, donner un score de confiance.
+
+- Health check IA
+- Analyse textuelle d'une demande
+- Score de confiance simulé

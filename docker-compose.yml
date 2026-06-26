@@ -5,15 +5,24 @@ services:
       POSTGRES_USER: noversia
       POSTGRES_PASSWORD: noversia
       POSTGRES_DB: noversia
-    ports: ["5432:5432"]
-    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./services/api/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+
   redis:
     image: redis:7
-    ports: ["6379:6379"]
+    ports:
+      - "6379:6379"
+
   neo4j:
     image: neo4j:5
     environment:
       NEO4J_AUTH: neo4j/noversia-password
-    ports: ["7474:7474", "7687:7687"]
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+
 volumes:
   postgres_data:

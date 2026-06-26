@@ -14,11 +14,15 @@ nav:
   - Architecture:
       - Vue globale: docs/05-architecture/overview.md
       - C4: docs/05-architecture/c4.md
+      - Backend Go: docs/05-architecture/backend-go.md
   - IA:
       - Architecture IA: docs/06-ai/ai-architecture.md
-  - Sécurité:
-      - Principes: docs/09-security/security-principles.md
+      - Service IA: docs/06-ai/ai-service.md
+  - Données:
+      - Modèle initial: docs/07-data-model/data-model-overview.md
   - API:
       - Standards API: docs/08-api/api-standards.md
+  - Sécurité:
+      - Principes: docs/09-security/security-principles.md
   - Roadmap:
       - Roadmap: docs/13-roadmap/roadmap.md

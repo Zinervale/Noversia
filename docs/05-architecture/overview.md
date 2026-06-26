@@ -1,11 +1,21 @@
 # Architecture globale
 
-## Choix initial
-Monolithe modulaire pour livrer vite, garder une forte cohérence métier et limiter les coûts.
+## Choix
+
+Monolithe modulaire Go + service IA Python séparé.
 
 ```text
-Clients -> API Gateway -> Core Platform (Go) -> PostgreSQL / Redis / Neo4j -> AI Service (Python) -> LLM Gateway
+Client
+  |
+API Go
+  |
+PostgreSQL / Redis / Neo4j
+  |
+AI Service Python
+  |
+LLM Gateway
 ```
 
-## Modules Core
-Identity, Accounts, Transactions, Merchants, Categories, Budget, Goals, Assets, Loans, Recommendations, Notifications, Billing, Audit, Settings.
+## Raison
+
+Cette architecture permet de livrer vite sans s'enfermer dans des microservices prématurés.

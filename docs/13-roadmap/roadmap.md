@@ -1,16 +1,18 @@
-# Roadmap initiale
+# Roadmap
 
 ## Sprint 0 — Fondation
-Dépôt, documentation, ADR, Docker Compose, API skeleton, AI service skeleton, modèle de données initial.
 
-## Sprint 1 — Utilisateurs et comptes
-Authentification, profil, comptes manuels, import CSV, transactions.
+Statut : en cours
 
-## Sprint 2 — Catégorisation
-Marchands, catégories, règles, catégorisation automatique.
+- Dépôt documentaire
+- Backend Go skeleton
+- Service IA Python skeleton
+- PostgreSQL / Redis / Neo4j
+- OpenAPI
+- Docker Compose
 
-## Sprint 3 — Budget et objectifs
-Enveloppes, objectifs, prévisions simples.
+## Sprint 1 — Transactions
 
-## Sprint 4 — IA MVP
-Résumé mensuel, Q/R transactions, score de confiance.
+- Import CSV
+- Normalisation
+- Catégorisation par règles
