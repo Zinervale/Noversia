@@ -1,21 +1,17 @@
 # Module Transactions
 
-## v6
+## v7
 
-Nouveaux composants :
+Nouveaux comportements :
 
-- `categorizer.go`
-- `CategorizationRule`
-- application des règles avant persistance
+- correction de catégorie ;
+- création d'un événement d'enrichissement ;
+- suggestion de règle.
 
-## Flux
+## Couches
 
-```mermaid
-flowchart TD
-    A[Transaction valide] --> B[Normalisation libellé]
-    B --> C[Recherche règle]
-    C --> D[Catégorie trouvée]
-    C --> E[Aucune règle]
-    D --> F[Insertion avec category_id]
-    E --> G[Insertion sans catégorie]
-```
+- Handler HTTP
+- Service
+- Repository
+- Parser CSV
+- Categorizer

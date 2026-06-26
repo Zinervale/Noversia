@@ -1,18 +1,17 @@
 # Noversia Platform
 
-## v6 — Rule-Based Categorization
+## v7 — Manual Category Correction
 
-Cette version ajoute la première brique d'intelligence déterministe : la catégorisation automatique par règles.
+Cette version ajoute la correction manuelle de catégorie et l'historique d'enrichissement.
 
 ## Nouveautés
 
-- Tables `categorization_rules` et catégories seedées.
-- Catégorisation automatique à l'import CSV.
-- Endpoint `GET /api/v1/categories`.
-- Endpoint `GET /api/v1/categorization-rules`.
-- Endpoint `POST /api/v1/categorization-rules`.
-- Tests unitaires du moteur de catégorisation.
-- Documentation fonctionnelle et technique.
+- Endpoint `PATCH /api/v1/transactions/{id}/category`.
+- Table `transaction_enrichments`.
+- Historique des corrections de catégorie.
+- Détection de suggestion de règle après correction.
+- Endpoint `GET /api/v1/rule-suggestions`.
+- Documentation produit/technique mise à jour.
 
 ## Lancement
 
@@ -20,5 +19,12 @@ Cette version ajoute la première brique d'intelligence déterministe : la caté
 cp .env.example .env
 docker compose up -d
 make api
-make test
+```
+
+## Exemple correction catégorie
+
+```bash
+curl -X PATCH http://localhost:8080/api/v1/transactions/<id>/category \
+  -H "Content-Type: application/json" \
+  -d '{"categoryId":"<category-id>","reason":"manual_correction"}'
 ```

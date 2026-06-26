@@ -1,20 +1,20 @@
-# Modèle de données v6
+# Modèle de données v7
 
-## Nouvelles structures
+## Nouvelle table
 
-### categorization_rules
+### transaction_enrichments
 
-Permet de classer automatiquement une transaction.
+Historise les changements apportés à une transaction.
 
-Colonnes principales :
+Colonnes :
+- transaction_id
+- enrichment_type
+- previous_value
+- new_value
+- source
+- reason
+- created_at
 
-- pattern
-- match_type
-- category_id
-- priority
-- confidence_score
-- enabled
+## Objectif
 
-## Principe
-
-Les règles sont explicables et peuvent être affichées à l'utilisateur.
+Garantir la traçabilité des corrections et préparer l'apprentissage.

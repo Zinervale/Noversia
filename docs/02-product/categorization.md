@@ -1,33 +1,14 @@
 # Catégorisation automatique
 
-## Objectif
+## v7
 
-Réduire le reclassement manuel mensuel.
+La catégorisation combine désormais :
 
-## Approche v6
+- règles déterministes ;
+- correction manuelle ;
+- historique d'enrichissement ;
+- suggestion de règle.
 
-Le système utilise des règles déterministes :
+## Principe
 
-- type de règle : `contains`
-- champ analysé : libellé de transaction
-- catégorie cible
-- priorité
-- score de confiance
-
-## Exemples
-
-| Motif | Catégorie |
-|---|---|
-| CARREFOUR | Courses |
-| NETFLIX | Abonnements |
-| SALAIRE | Revenus |
-| TOTAL | Transport |
-
-## Pourquoi commencer par des règles ?
-
-- Prévisible.
-- Explicable.
-- Peu coûteux.
-- Conforme au principe : l'IA n'invente pas.
-
-L'IA viendra ensuite en complément lorsque les règles ne suffisent pas.
+Une correction utilisateur ne modifie pas seulement la transaction : elle nourrit l'apprentissage futur.

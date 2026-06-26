@@ -1,11 +1,7 @@
 # EPIC-003 — Catégorisation
 
-## Statut
+## Réalisé v7
 
-Démarré en v6.
-
-## Réalisé
-
-- Règles de catégorisation.
-- Catégorisation automatique à l'import.
-- Endpoints règles et catégories.
+- Correction manuelle.
+- Historique enrichissement.
+- Suggestions de règles.

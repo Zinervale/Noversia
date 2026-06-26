@@ -1,23 +1,21 @@
 # Changelog
 
-## v6 — Rule-Based Categorization
+## v7 — Manual Category Correction
 
 ### Ajouté
 
-- Moteur de catégorisation déterministe.
-- Table `categorization_rules`.
-- Catégories par défaut.
-- Application des règles pendant l'import CSV.
-- Endpoints de lecture/création des règles.
-- Tests unitaires sur le matching de règles.
+- Correction manuelle d'une catégorie transaction.
+- Historique `transaction_enrichments`.
+- Endpoint de suggestion de règle.
+- Documentation de correction et apprentissage.
 
 ### Modifié
 
-- Les transactions importées peuvent désormais recevoir une catégorie automatiquement.
-- OpenAPI passe en v0.7.
+- OpenAPI passe en v0.8.
+- Roadmap enrichie sur apprentissage progressif.
 
 ### Prochaine étape
 
-- Correction manuelle d'une catégorie.
-- Création automatique d'une règle après corrections répétées.
-- Enrichissement marchand.
+- Création d'une règle depuis une suggestion.
+- Détection marchand.
+- Normalisation des libellés.

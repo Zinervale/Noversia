@@ -1,5 +1,5 @@
 # Noversia Platform
 
-Version v6 — Rule-Based Categorization.
+Version v7 — Manual Category Correction.
 
-Cette version ajoute la catégorisation automatique déterministe des transactions.
+Cette version ajoute la capacité essentielle : l'utilisateur peut corriger une catégorie et le système conserve l'historique.

@@ -1,11 +1,13 @@
 # Roadmap
 
-## v6
-
-- Catégorisation par règles.
-
 ## v7
 
-- Correction manuelle d'une catégorie.
-- Historique des changements.
-- Suggestion automatique de règle.
+- Correction manuelle catégorie.
+- Historique d'enrichissement.
+- Suggestions de règles.
+
+## v8
+
+- Création de règle depuis suggestion.
+- Détection marchand.
+- Normalisation libellés.

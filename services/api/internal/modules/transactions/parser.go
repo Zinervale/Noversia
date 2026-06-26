@@ -14,13 +14,11 @@ func ParseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 	csvReader.TrimLeadingSpace = true
 	records, err := csvReader.ReadAll()
 	if err != nil { return ImportReport{}, err }
-
 	report := ImportReport{Status: "validated", Filename: filename, Rows: []ImportRowResult{}}
 	if len(records) == 0 { return report, nil }
 
 	header := map[string]int{}
 	for i, col := range records[0] { header[strings.ToLower(strings.TrimSpace(col))] = i }
-
 	for _, col := range []string{"date", "label", "amount", "currency"} {
 		if _, ok := header[col]; !ok { return ImportReport{}, fmt.Errorf("colonne obligatoire manquante: %s", col) }
 	}
@@ -32,9 +30,8 @@ func ParseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 		amountValue := getCSVValue(record, header["amount"])
 		currencyValue := strings.ToUpper(getCSVValue(record, header["currency"]))
 
-		if dateValue == "" { result.Errors = append(result.Errors, "date obligatoire") 
-		} else if _, err := time.Parse("2006-01-02", dateValue); err != nil {
-			result.Errors = append(result.Errors, "date invalide, format attendu YYYY-MM-DD")
+		if dateValue == "" { result.Errors = append(result.Errors, "date obligatoire")
+		} else if _, err := time.Parse("2006-01-02", dateValue); err != nil { result.Errors = append(result.Errors, "date invalide, format attendu YYYY-MM-DD")
 		} else { result.Date = dateValue }
 
 		if labelValue == "" { result.Errors = append(result.Errors, "label obligatoire") } else { result.Label = labelValue }

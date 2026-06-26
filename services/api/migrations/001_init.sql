@@ -69,6 +69,17 @@ CREATE TABLE IF NOT EXISTS transactions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS transaction_enrichments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    transaction_id UUID NOT NULL REFERENCES transactions(id) ON DELETE CASCADE,
+    enrichment_type TEXT NOT NULL,
+    previous_value TEXT,
+    new_value TEXT,
+    source TEXT NOT NULL DEFAULT 'manual',
+    reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS import_rows (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     import_batch_id UUID NOT NULL REFERENCES import_batches(id) ON DELETE CASCADE,
@@ -88,16 +99,6 @@ CREATE TABLE IF NOT EXISTS recommendations (
     impact_amount NUMERIC(18,2),
     confidence_score NUMERIC(5,2) NOT NULL DEFAULT 0,
     status TEXT NOT NULL DEFAULT 'pending',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS audit_logs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    action TEXT NOT NULL,
-    entity_type TEXT,
-    entity_id UUID,
-    metadata JSONB NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

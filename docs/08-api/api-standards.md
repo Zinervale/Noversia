@@ -1,7 +1,6 @@
 # Standards API
 
-Routes v6 :
+Routes ajoutées en v7 :
 
-- `GET /api/v1/categories`
-- `GET /api/v1/categorization-rules`
-- `POST /api/v1/categorization-rules`
+- `PATCH /api/v1/transactions/{id}/category`
+- `GET /api/v1/rule-suggestions`

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noversia API
-  version: 0.7.0
+  version: 0.8.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
@@ -24,18 +24,28 @@ paths:
       summary: Crée une règle de catégorisation
       responses:
         "201": { description: Règle créée }
+  /rule-suggestions:
+    get:
+      summary: Liste les suggestions de règles
+      responses:
+        "200": { description: Suggestions }
   /transactions:
     get:
-      summary: Liste les transactions persistées
+      summary: Liste les transactions
       responses:
         "200": { description: Liste des transactions }
+  /transactions/{id}/category:
+    patch:
+      summary: Corrige manuellement la catégorie d'une transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: Transaction mise à jour }
   /transactions/import:
     post:
-      summary: Importe, catégorise et persiste un fichier CSV bancaire
+      summary: Importe, catégorise et persiste un CSV bancaire
       responses:
         "202": { description: Rapport d'import }
-  /imports/{id}:
-    get:
-      summary: Consulte un rapport d'import
-      responses:
-        "200": { description: Rapport d'import }
