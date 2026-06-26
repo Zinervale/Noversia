@@ -1,0 +1,24 @@
+site_name: Noversia Platform
+site_description: Documentation produit, technique et stratégique de Noversia Platform
+theme:
+  name: material
+  language: fr
+nav:
+  - Accueil: docs/index.md
+  - Vision:
+      - Vision produit: docs/01-vision/vision.md
+      - Manifeste: docs/01-vision/manifesto.md
+  - Produit:
+      - MVP: docs/02-product/mvp.md
+      - Fonctionnalités: docs/02-product/features.md
+  - Architecture:
+      - Vue globale: docs/05-architecture/overview.md
+      - C4: docs/05-architecture/c4.md
+  - IA:
+      - Architecture IA: docs/06-ai/ai-architecture.md
+  - Sécurité:
+      - Principes: docs/09-security/security-principles.md
+  - API:
+      - Standards API: docs/08-api/api-standards.md
+  - Roadmap:
+      - Roadmap: docs/13-roadmap/roadmap.md

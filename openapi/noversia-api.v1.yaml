@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Noversia API
+  version: 0.1.0
+servers:
+  - url: https://api.noversia.com/api/v1
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: OK }
+  /accounts:
+    get:
+      summary: Liste les comptes
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Liste des comptes }
+    post:
+      summary: Crée un compte manuel
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201': { description: Compte créé }
+  /transactions:
+    get:
+      summary: Liste les transactions
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Liste des transactions }
+  /transactions/import:
+    post:
+      summary: Importe un fichier de transactions
+      security: [{ bearerAuth: [] }]
+      responses:
+        '202': { description: Import accepté }
+  /recommendations:
+    get:
+      summary: Liste les recommandations
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Liste des recommandations }
+  /chat:
+    post:
+      summary: Pose une question au CFO IA
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Réponse IA }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
