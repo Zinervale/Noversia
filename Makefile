@@ -4,7 +4,7 @@ up:
 	docker compose up -d
 
 down:
-	docker compose down
+	docker compose down -v
 
 api:
 	cd services/api && go run ./cmd/api

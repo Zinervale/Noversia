@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
+	"crypto/sha256"
+	"database/sql"
 	"encoding/csv"
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -10,14 +15,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-type Account struct {
-	ID       string  `json:"id"`
-	Name     string  `json:"name"`
-	Type     string  `json:"type"`
-	Currency string  `json:"currency"`
-	Balance  float64 `json:"balance"`
+type App struct {
+	db *sql.DB
 }
 
 type Transaction struct {
@@ -28,43 +31,48 @@ type Transaction struct {
 	Date     string  `json:"date"`
 }
 
-type Recommendation struct {
-	ID              string  `json:"id"`
-	Title           string  `json:"title"`
-	Description     string  `json:"description"`
-	ConfidenceScore float64 `json:"confidenceScore"`
-}
-
 type ImportRowResult struct {
-	Line     int      `json:"line"`
-	Valid    bool     `json:"valid"`
-	Date     string   `json:"date,omitempty"`
-	Label    string   `json:"label,omitempty"`
-	Amount   float64  `json:"amount,omitempty"`
-	Currency string   `json:"currency,omitempty"`
-	Errors   []string `json:"errors,omitempty"`
+	Line          int      `json:"line"`
+	Valid         bool     `json:"valid"`
+	Date          string   `json:"date,omitempty"`
+	Label         string   `json:"label,omitempty"`
+	Amount        float64  `json:"amount,omitempty"`
+	Currency      string   `json:"currency,omitempty"`
+	Errors        []string `json:"errors,omitempty"`
+	TransactionID string   `json:"transactionId,omitempty"`
+	Duplicate     bool     `json:"duplicate,omitempty"`
 }
 
 type ImportReport struct {
-	Status      string            `json:"status"`
-	Filename    string            `json:"filename"`
+	ID           string            `json:"id"`
+	Status       string            `json:"status"`
+	Filename     string            `json:"filename"`
 	DetectedRows int              `json:"detectedRows"`
-	ValidRows   int               `json:"validRows"`
-	InvalidRows int               `json:"invalidRows"`
-	Rows        []ImportRowResult `json:"rows"`
+	ValidRows    int              `json:"validRows"`
+	InvalidRows  int              `json:"invalidRows"`
+	Rows         []ImportRowResult `json:"rows"`
 }
 
 func main() {
 	port := getenv("API_PORT", "8080")
+	db, err := sql.Open("pgx", getenv("DATABASE_URL", "postgres://noversia:noversia@localhost:5432/noversia?sslmode=disable"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
+	app := &App{db: db}
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /api/v1/health", healthHandler)
-	mux.HandleFunc("GET /api/v1/accounts", accountsHandler)
-	mux.HandleFunc("POST /api/v1/accounts", createAccountHandler)
-	mux.HandleFunc("GET /api/v1/transactions", transactionsHandler)
-	mux.HandleFunc("POST /api/v1/transactions/import", importTransactionsHandler)
-	mux.HandleFunc("GET /api/v1/recommendations", recommendationsHandler)
-	mux.HandleFunc("POST /api/v1/chat", chatHandler)
+	mux.HandleFunc("GET /api/v1/health", app.healthHandler)
+	mux.HandleFunc("GET /api/v1/accounts", app.accountsHandler)
+	mux.HandleFunc("GET /api/v1/transactions", app.transactionsHandler)
+	mux.HandleFunc("POST /api/v1/transactions/import", app.importTransactionsHandler)
+	mux.HandleFunc("GET /api/v1/imports/{id}", app.importReportHandler)
+	mux.HandleFunc("GET /api/v1/recommendations", app.recommendationsHandler)
+	mux.HandleFunc("POST /api/v1/chat", app.chatHandler)
 
 	log.Printf("Noversia API listening on :%s", port)
 	if err := http.ListenAndServe(":"+port, withCORS(mux)); err != nil {
@@ -72,43 +80,63 @@ func main() {
 	}
 }
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "service": "noversia-api", "version": "0.3.0"})
+func (a *App) healthHandler(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "service": "noversia-api", "version": "0.4.0"})
 }
 
-func accountsHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, []Account{
-		{ID: "acc_demo_current", Name: "Compte courant", Type: "checking", Currency: "EUR", Balance: 2450.42},
-		{ID: "acc_demo_savings", Name: "Livret", Type: "savings", Currency: "EUR", Balance: 8200.00},
-	})
-}
-
-func createAccountHandler(w http.ResponseWriter, r *http.Request) {
-	var input Account
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		writeError(w, http.StatusBadRequest, "INVALID_JSON", "JSON invalide")
+func (a *App) accountsHandler(w http.ResponseWriter, r *http.Request) {
+	rows, err := a.db.QueryContext(r.Context(), `SELECT id::text, name, type, currency, balance::float8 FROM accounts ORDER BY created_at`)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "DB_ERROR", err.Error())
 		return
 	}
-	if input.Name == "" || input.Type == "" {
-		writeError(w, http.StatusBadRequest, "MISSING_REQUIRED_FIELD", "name et type sont obligatoires")
+	defer rows.Close()
+
+	type Account struct {
+		ID string `json:"id"`
+		Name string `json:"name"`
+		Type string `json:"type"`
+		Currency string `json:"currency"`
+		Balance float64 `json:"balance"`
+	}
+
+	accounts := []Account{}
+	for rows.Next() {
+		var acc Account
+		if err := rows.Scan(&acc.ID, &acc.Name, &acc.Type, &acc.Currency, &acc.Balance); err != nil {
+			writeError(w, http.StatusInternalServerError, "DB_SCAN_ERROR", err.Error())
+			return
+		}
+		accounts = append(accounts, acc)
+	}
+	writeJSON(w, http.StatusOK, accounts)
+}
+
+func (a *App) transactionsHandler(w http.ResponseWriter, r *http.Request) {
+	rows, err := a.db.QueryContext(r.Context(), `
+		SELECT id::text, label, amount::float8, currency, booked_at::text
+		FROM transactions
+		ORDER BY booked_at DESC, created_at DESC
+		LIMIT 200`)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "DB_ERROR", err.Error())
 		return
 	}
-	input.ID = "acc_created_demo"
-	if input.Currency == "" {
-		input.Currency = "EUR"
+	defer rows.Close()
+
+	transactions := []Transaction{}
+	for rows.Next() {
+		var tx Transaction
+		if err := rows.Scan(&tx.ID, &tx.Label, &tx.Amount, &tx.Currency, &tx.Date); err != nil {
+			writeError(w, http.StatusInternalServerError, "DB_SCAN_ERROR", err.Error())
+			return
+		}
+		transactions = append(transactions, tx)
 	}
-	writeJSON(w, http.StatusCreated, input)
+	writeJSON(w, http.StatusOK, transactions)
 }
 
-func transactionsHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, []Transaction{
-		{ID: "txn_001", Label: "CARREFOUR MARKET", Amount: -82.31, Currency: "EUR", Date: "2026-06-25"},
-		{ID: "txn_002", Label: "SALAIRE", Amount: 2450.00, Currency: "EUR", Date: "2026-06-24"},
-		{ID: "txn_003", Label: "NETFLIX", Amount: -13.49, Currency: "EUR", Date: "2026-06-23"},
-	})
-}
-
-func importTransactionsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *App) importTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "INVALID_MULTIPART", "Formulaire multipart invalide")
@@ -128,6 +156,11 @@ func importTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := a.persistImportReport(r.Context(), &report); err != nil {
+		writeError(w, http.StatusInternalServerError, "IMPORT_PERSIST_ERROR", err.Error())
+		return
+	}
+
 	writeJSON(w, http.StatusAccepted, report)
 }
 
@@ -140,12 +173,7 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 		return ImportReport{}, err
 	}
 
-	report := ImportReport{
-		Status:   "validated",
-		Filename: filename,
-		Rows:     []ImportRowResult{},
-	}
-
+	report := ImportReport{Status: "validated", Filename: filename, Rows: []ImportRowResult{}}
 	if len(records) == 0 {
 		return report, nil
 	}
@@ -155,10 +183,9 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 		header[strings.ToLower(strings.TrimSpace(col))] = i
 	}
 
-	required := []string{"date", "label", "amount", "currency"}
-	for _, col := range required {
+	for _, col := range []string{"date", "label", "amount", "currency"} {
 		if _, ok := header[col]; !ok {
-			return ImportReport{}, &csvValidationError{message: "colonne obligatoire manquante: " + col}
+			return ImportReport{}, fmt.Errorf("colonne obligatoire manquante: %s", col)
 		}
 	}
 
@@ -169,9 +196,9 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 		dateValue := getCSVValue(record, header["date"])
 		labelValue := getCSVValue(record, header["label"])
 		amountValue := getCSVValue(record, header["amount"])
-		currencyValue := getCSVValue(record, header["currency"])
+		currencyValue := strings.ToUpper(getCSVValue(record, header["currency"]))
 
-		if strings.TrimSpace(dateValue) == "" {
+		if dateValue == "" {
 			result.Errors = append(result.Errors, "date obligatoire")
 		} else if _, err := time.Parse("2006-01-02", dateValue); err != nil {
 			result.Errors = append(result.Errors, "date invalide, format attendu YYYY-MM-DD")
@@ -179,14 +206,14 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 			result.Date = dateValue
 		}
 
-		if strings.TrimSpace(labelValue) == "" {
+		if labelValue == "" {
 			result.Errors = append(result.Errors, "label obligatoire")
 		} else {
 			result.Label = labelValue
 		}
 
 		amount, err := strconv.ParseFloat(strings.ReplaceAll(amountValue, ",", "."), 64)
-		if strings.TrimSpace(amountValue) == "" {
+		if amountValue == "" {
 			result.Errors = append(result.Errors, "amount obligatoire")
 		} else if err != nil {
 			result.Errors = append(result.Errors, "amount invalide")
@@ -194,10 +221,10 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 			result.Amount = amount
 		}
 
-		if strings.TrimSpace(currencyValue) == "" {
+		if currencyValue == "" {
 			result.Errors = append(result.Errors, "currency obligatoire")
 		} else {
-			result.Currency = strings.ToUpper(currencyValue)
+			result.Currency = currencyValue
 		}
 
 		if len(result.Errors) > 0 {
@@ -214,12 +241,122 @@ func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error
 	return report, nil
 }
 
-type csvValidationError struct {
-	message string
+func (a *App) persistImportReport(ctx context.Context, report *ImportReport) error {
+	tx, err := a.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	var userID string
+	if err := tx.QueryRowContext(ctx, `SELECT id::text FROM users WHERE email = 'demo@noversia.com'`).Scan(&userID); err != nil {
+		return err
+	}
+
+	var accountID string
+	if err := tx.QueryRowContext(ctx, `SELECT id::text FROM accounts WHERE user_id = $1 ORDER BY created_at LIMIT 1`, userID).Scan(&accountID); err != nil {
+		return err
+	}
+
+	err = tx.QueryRowContext(ctx, `
+		INSERT INTO import_batches (user_id, filename, status, detected_rows, valid_rows, invalid_rows)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id::text`,
+		userID, report.Filename, report.Status, report.DetectedRows, report.ValidRows, report.InvalidRows,
+	).Scan(&report.ID)
+	if err != nil {
+		return err
+	}
+
+	for i := range report.Rows {
+		row := &report.Rows[i]
+		rawData, _ := json.Marshal(row)
+		errorsJSON, _ := json.Marshal(row.Errors)
+
+		var transactionID sql.NullString
+		if row.Valid {
+			sourceHash := hashTransaction(row.Date, row.Label, row.Amount, row.Currency)
+			err := tx.QueryRowContext(ctx, `
+				INSERT INTO transactions (account_id, import_batch_id, booked_at, label, raw_label, amount, currency, source_hash)
+				VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+				ON CONFLICT (source_hash) DO NOTHING
+				RETURNING id::text`,
+				accountID, report.ID, row.Date, row.Label, row.Label, row.Amount, row.Currency, sourceHash,
+			).Scan(&transactionID)
+
+			if err == sql.ErrNoRows {
+				row.Duplicate = true
+			} else if err != nil {
+				return err
+			} else {
+				row.TransactionID = transactionID.String
+			}
+		}
+
+		_, err = tx.ExecContext(ctx, `
+			INSERT INTO import_rows (import_batch_id, line_number, valid, raw_data, errors, transaction_id)
+			VALUES ($1, $2, $3, $4, $5, NULLIF($6, '')::uuid)`,
+			report.ID, row.Line, row.Valid, rawData, errorsJSON, row.TransactionID,
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }
 
-func (e *csvValidationError) Error() string {
-	return e.message
+func (a *App) importReportHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	var report ImportReport
+	err := a.db.QueryRowContext(r.Context(), `
+		SELECT id::text, status, filename, detected_rows, valid_rows, invalid_rows
+		FROM import_batches WHERE id = $1`, id,
+	).Scan(&report.ID, &report.Status, &report.Filename, &report.DetectedRows, &report.ValidRows, &report.InvalidRows)
+	if err != nil {
+		writeError(w, http.StatusNotFound, "IMPORT_NOT_FOUND", "Import introuvable")
+		return
+	}
+
+	rows, err := a.db.QueryContext(r.Context(), `
+		SELECT line_number, valid, raw_data, errors, COALESCE(transaction_id::text, '')
+		FROM import_rows WHERE import_batch_id = $1 ORDER BY line_number`, id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "DB_ERROR", err.Error())
+		return
+	}
+	defer rows.Close()
+
+	report.Rows = []ImportRowResult{}
+	for rows.Next() {
+		var row ImportRowResult
+		var rawData []byte
+		var errorsJSON []byte
+		var txID string
+		if err := rows.Scan(&row.Line, &row.Valid, &rawData, &errorsJSON, &txID); err != nil {
+			writeError(w, http.StatusInternalServerError, "DB_SCAN_ERROR", err.Error())
+			return
+		}
+		_ = json.Unmarshal(rawData, &row)
+		_ = json.Unmarshal(errorsJSON, &row.Errors)
+		row.TransactionID = txID
+		report.Rows = append(report.Rows, row)
+	}
+	writeJSON(w, http.StatusOK, report)
+}
+
+func (a *App) recommendationsHandler(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, []map[string]any{
+		{"id": "rec_001", "title": "Vérifier les abonnements", "description": "Un abonnement récurrent a été détecté.", "confidenceScore": 0.82},
+	})
+}
+
+func (a *App) chatHandler(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]any{
+		"answer": "Analyse IA simulée : vos dépenses principales semblent concentrées sur courses, abonnements et dépenses variables.",
+		"confidenceScore": 0.64,
+		"source": "mock",
+	})
 }
 
 func getCSVValue(record []string, index int) string {
@@ -229,28 +366,10 @@ func getCSVValue(record []string, index int) string {
 	return strings.TrimSpace(record[index])
 }
 
-func recommendationsHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, []Recommendation{
-		{
-			ID: "rec_001",
-			Title: "Vérifier les abonnements",
-			Description: "Un abonnement récurrent a été détecté. Il pourra être confirmé ou ignoré dans une prochaine version.",
-			ConfidenceScore: 0.82,
-		},
-	})
-}
-
-func chatHandler(w http.ResponseWriter, r *http.Request) {
-	var input struct{ Message string `json:"message"` }
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		writeError(w, http.StatusBadRequest, "INVALID_JSON", "JSON invalide")
-		return
-	}
-	writeJSON(w, http.StatusOK, map[string]any{
-		"answer": "Analyse IA simulée : vos dépenses principales semblent concentrées sur courses, abonnements et dépenses variables.",
-		"confidenceScore": 0.64,
-		"source": "mock",
-	})
+func hashTransaction(date string, label string, amount float64, currency string) string {
+	payload := fmt.Sprintf("%s|%s|%.2f|%s", date, strings.ToUpper(strings.TrimSpace(label)), amount, strings.ToUpper(currency))
+	sum := sha256.Sum256([]byte(payload))
+	return hex.EncodeToString(sum[:])
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) {

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noversia API
-  version: 0.4.0
+  version: 0.5.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
@@ -9,23 +9,20 @@ paths:
     get:
       summary: Health check API
       responses:
-        "200":
-          description: OK
+        "200": { description: OK }
   /accounts:
     get:
       summary: Liste les comptes
       responses:
-        "200":
-          description: Liste des comptes
+        "200": { description: Liste des comptes }
   /transactions:
     get:
-      summary: Liste les transactions
+      summary: Liste les transactions persistées
       responses:
-        "200":
-          description: Liste des transactions
+        "200": { description: Liste des transactions }
   /transactions/import:
     post:
-      summary: Importe et valide un fichier CSV bancaire
+      summary: Importe, valide et persiste un fichier CSV bancaire
       requestBody:
         required: true
         content:
@@ -33,21 +30,26 @@ paths:
             schema:
               type: object
               properties:
-                file:
-                  type: string
-                  format: binary
+                file: { type: string, format: binary }
       responses:
-        "202":
-          description: Rapport d'import
+        "202": { description: Rapport d'import }
+  /imports/{id}:
+    get:
+      summary: Consulte un rapport d'import
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: Rapport d'import }
   /recommendations:
     get:
       summary: Liste les recommandations
       responses:
-        "200":
-          description: Liste des recommandations
+        "200": { description: Liste des recommandations }
   /chat:
     post:
       summary: Envoie une question au service IA
       responses:
-        "200":
-          description: Réponse IA
+        "200": { description: Réponse IA }

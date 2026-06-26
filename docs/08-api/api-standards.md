@@ -1,7 +1,11 @@
 # Standards API
 
-Toutes les routes publiques sont sous `/api/v1`.
+Routes v4 :
 
-## Erreurs
-
-Les erreurs sont retournées dans un format JSON commun.
+- `GET /api/v1/health`
+- `GET /api/v1/accounts`
+- `GET /api/v1/transactions`
+- `POST /api/v1/transactions/import`
+- `GET /api/v1/imports/{id}`
+- `GET /api/v1/recommendations`
+- `POST /api/v1/chat`

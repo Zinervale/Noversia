@@ -2,14 +2,15 @@
 
 Plateforme d'intelligence financière personnelle.
 
-## Nouveautés v3
+## Nouveautés v4
 
-- Parsing CSV réel côté API Go.
-- Rapport d'import ligne par ligne.
-- Validation des colonnes obligatoires.
-- Validation des montants et dates.
-- Détection basique des lignes invalides.
-- Suppression du fichier `GIT_COMMIT_MESSAGE.md` de l'archive.
+- Connexion PostgreSQL réelle côté API Go.
+- Création des tables `import_batches` et `import_rows`.
+- Persistance des transactions valides importées par CSV.
+- Détection simple des doublons via empreinte `source_hash`.
+- Endpoint `GET /api/v1/imports/{id}` pour consulter un rapport d'import.
+- Endpoint `GET /api/v1/transactions` connecté à PostgreSQL.
+- OpenAPI v0.5.
 
 ## Lancement local
 
@@ -20,10 +21,12 @@ make api
 make ai
 ```
 
-## Test import CSV
+## Test
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/transactions/import \
   -H "Content-Type: multipart/form-data" \
   -F "file=@samples/bank-transactions-sample.csv"
+
+curl http://localhost:8080/api/v1/transactions
 ```

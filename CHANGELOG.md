@@ -1,23 +1,23 @@
 # Changelog
 
-## v3 — Real CSV Parsing
+## v4 — Persist CSV Imports
 
 ### Ajouté
 
-- Parsing CSV réel côté Go.
-- Validation des colonnes `date`, `label`, `amount`, `currency`.
-- Rapport d'import ligne par ligne.
-- Comptage des lignes valides et invalides.
-- Exemple CSV avec une ligne invalide pour tester les erreurs.
-- Documentation d'import CSV enrichie.
+- Connexion PostgreSQL depuis le backend Go.
+- Tables `import_batches` et `import_rows`.
+- Persistance des transactions valides.
+- Hash de transaction pour limiter les doublons.
+- Endpoint de consultation d'un import.
+- Lecture des transactions depuis PostgreSQL.
 
 ### Modifié
 
-- L'archive ne contient plus `GIT_COMMIT_MESSAGE.md`.
-- OpenAPI passe en v0.4.
+- `GET /transactions` ne retourne plus uniquement des données mockées.
+- OpenAPI passe en v0.5.
 
 ### Prochaine étape
 
-- Persistance PostgreSQL des transactions importées.
-- Création d'une table `import_batches`.
-- Détection de doublons.
+- Refactoriser le handler en couche service/repository.
+- Ajouter des tests unitaires sur le parser CSV.
+- Ajouter la catégorisation par règles.

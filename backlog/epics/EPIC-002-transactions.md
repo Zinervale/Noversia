@@ -9,3 +9,5 @@ En cours.
 - Endpoint import CSV.
 - Parsing CSV.
 - Validation ligne par ligne.
+- Persistance PostgreSQL.
+- Détection simple de doublons.

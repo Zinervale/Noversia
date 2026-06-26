@@ -1,30 +1,31 @@
 # Import CSV bancaire
 
-## Format attendu v3
-
-Le CSV doit contenir les colonnes suivantes :
+## Format attendu
 
 ```csv
 date,label,amount,currency
 2026-06-25,CARREFOUR MARKET,-82.31,EUR
 ```
 
-## Règles de validation
+## Flux v4
 
-- `date` obligatoire au format `YYYY-MM-DD`.
-- `label` obligatoire.
-- `amount` obligatoire et numérique.
-- `currency` obligatoire, 3 caractères recommandés.
+```mermaid
+flowchart TD
+    A[Upload CSV] --> B[Parsing]
+    B --> C[Validation]
+    C --> D[Création import_batch]
+    D --> E[Création import_rows]
+    E --> F[Insertion transactions valides]
+    F --> G[Rapport]
+```
 
-## Réponse API
+## Détection doublons
 
-Le système retourne :
+Une empreinte `source_hash` est calculée à partir de :
 
-- nombre de lignes détectées ;
-- nombre de lignes valides ;
-- nombre de lignes invalides ;
-- détail ligne par ligne.
+- date ;
+- libellé ;
+- montant ;
+- devise.
 
-## Limite v3
-
-Les transactions ne sont pas encore écrites en base.
+Si l'empreinte existe déjà, la transaction n'est pas réinsérée.

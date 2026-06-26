@@ -1,5 +1,5 @@
 # Noversia Platform
 
-Version v3 — Real CSV Parsing.
+Version v4 — Persist CSV Imports.
 
-Cette version ajoute le premier traitement métier réel : lecture, parsing et validation d'un CSV bancaire.
+Cette version rend l'import CSV réellement persistant dans PostgreSQL.

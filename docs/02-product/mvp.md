@@ -1,13 +1,14 @@
 # MVP Noversia Financial
 
-## Inclus v3
+## Inclus v4
 
 - API Go
 - Service IA Python
-- Transactions mockées
 - Parsing CSV réel
-- Rapport d'import ligne par ligne
+- Persistance PostgreSQL
+- Rapport d'import
+- Transactions consultables après import
 
 ## Prochaine étape
 
-Écriture en base PostgreSQL.
+Catégorisation automatique par règles.

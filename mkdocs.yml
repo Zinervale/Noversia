@@ -1,26 +1,18 @@
 site_name: Noversia Platform
-site_description: Documentation produit, technique et stratégique de Noversia Platform
 theme:
   name: material
   language: fr
 nav:
   - Accueil: docs/index.md
-  - Vision:
-      - Vision produit: docs/01-vision/vision.md
-      - Manifeste: docs/01-vision/manifesto.md
   - Produit:
       - MVP: docs/02-product/mvp.md
       - Import CSV: docs/02-product/csv-import.md
   - Architecture:
       - Vue globale: docs/05-architecture/overview.md
       - Backend Go: docs/05-architecture/backend-go.md
-  - IA:
-      - Architecture IA: docs/06-ai/ai-architecture.md
   - Données:
       - Modèle initial: docs/07-data-model/data-model-overview.md
   - API:
       - Standards API: docs/08-api/api-standards.md
-  - Sécurité:
-      - Principes: docs/09-security/security-principles.md
   - Roadmap:
       - Roadmap: docs/13-roadmap/roadmap.md

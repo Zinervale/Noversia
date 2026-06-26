@@ -1,16 +1,19 @@
-# Modèle de données initial
+# Modèle de données v4
 
-Tables :
-- users
-- accounts
-- merchants
-- categories
-- transactions
-- recommendations
-- audit_logs
+## Nouvelles tables
 
-À venir :
-- import_batches
-- import_rows
-- transaction_enrichments
-- categorization_rules
+### import_batches
+
+Représente un fichier importé.
+
+### import_rows
+
+Représente chaque ligne du fichier avec son statut.
+
+### transactions.source_hash
+
+Empreinte fonctionnelle pour limiter les doublons.
+
+## Principe
+
+Une ligne invalide est conservée dans `import_rows`, mais ne crée pas de transaction.

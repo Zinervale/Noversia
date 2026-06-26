@@ -1,12 +1,13 @@
 # Transaction Import Module
 
-## v3
+## v4
 
-Le parsing CSV réel est implémenté dans le handler.
+L'import CSV est persistant.
 
-## Refactorisation prévue
+## À extraire en v5
 
-Déplacer la logique dans :
 - `parser.go`
 - `validator.go`
-- `import_service.go`
+- `repository.go`
+- `service.go`
+- `handler.go`

@@ -1,12 +1,13 @@
 # Roadmap
 
-## v3
-
-- Parsing CSV réel
-- Rapport ligne par ligne
-
 ## v4
 
-- Persistance PostgreSQL
-- Batches d'import
-- Détection de doublons
+- Import CSV persistant.
+- Transactions lues depuis PostgreSQL.
+- Détection simple de doublons.
+
+## v5
+
+- Refactorisation service/repository.
+- Tests unitaires.
+- Catégorisation par règles.

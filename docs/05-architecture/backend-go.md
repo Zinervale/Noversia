@@ -1,13 +1,18 @@
 # Backend Go
 
-## v3
+## v4
 
-Ajout du parsing CSV réel directement dans le handler d'import.
+Le backend Go se connecte réellement à PostgreSQL via `database/sql` et le driver `pgx`.
 
-## Prochaine refactorisation
+## Dette technique acceptée
 
-Déplacer le parsing dans un service dédié :
+La logique d'import reste dans `main.go` pour accélérer.
 
-```text
-internal/modules/transactions/importer.go
-```
+## Refactorisation v5
+
+Extraire :
+
+- parser CSV ;
+- repository transaction ;
+- service import ;
+- handler HTTP.
