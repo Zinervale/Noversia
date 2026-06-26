@@ -1,11 +1,15 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type Account struct {
@@ -31,6 +35,25 @@ type Recommendation struct {
 	ConfidenceScore float64 `json:"confidenceScore"`
 }
 
+type ImportRowResult struct {
+	Line     int      `json:"line"`
+	Valid    bool     `json:"valid"`
+	Date     string   `json:"date,omitempty"`
+	Label    string   `json:"label,omitempty"`
+	Amount   float64  `json:"amount,omitempty"`
+	Currency string   `json:"currency,omitempty"`
+	Errors   []string `json:"errors,omitempty"`
+}
+
+type ImportReport struct {
+	Status      string            `json:"status"`
+	Filename    string            `json:"filename"`
+	DetectedRows int              `json:"detectedRows"`
+	ValidRows   int               `json:"validRows"`
+	InvalidRows int               `json:"invalidRows"`
+	Rows        []ImportRowResult `json:"rows"`
+}
+
 func main() {
 	port := getenv("API_PORT", "8080")
 	mux := http.NewServeMux()
@@ -50,7 +73,7 @@ func main() {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "service": "noversia-api", "version": "0.2.0"})
+	writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "service": "noversia-api", "version": "0.3.0"})
 }
 
 func accountsHandler(w http.ResponseWriter, r *http.Request) {
@@ -99,21 +122,111 @@ func importTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	content, err := io.ReadAll(file)
+	report, err := parseTransactionCSV(file, header.Filename)
 	if err != nil {
-		writeError(w, http.StatusBadRequest, "FILE_READ_ERROR", "Impossible de lire le fichier")
+		writeError(w, http.StatusBadRequest, "CSV_PARSE_ERROR", err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusAccepted, map[string]any{
-		"status": "accepted",
-		"filename": header.Filename,
-		"sizeBytes": len(content),
-		"detectedRows": 3,
-		"validRows": 3,
-		"invalidRows": 0,
-		"message": "Import CSV simulé accepté. Le parsing réel sera ajouté en prochaine version.",
-	})
+	writeJSON(w, http.StatusAccepted, report)
+}
+
+func parseTransactionCSV(reader io.Reader, filename string) (ImportReport, error) {
+	csvReader := csv.NewReader(reader)
+	csvReader.TrimLeadingSpace = true
+
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		return ImportReport{}, err
+	}
+
+	report := ImportReport{
+		Status:   "validated",
+		Filename: filename,
+		Rows:     []ImportRowResult{},
+	}
+
+	if len(records) == 0 {
+		return report, nil
+	}
+
+	header := map[string]int{}
+	for i, col := range records[0] {
+		header[strings.ToLower(strings.TrimSpace(col))] = i
+	}
+
+	required := []string{"date", "label", "amount", "currency"}
+	for _, col := range required {
+		if _, ok := header[col]; !ok {
+			return ImportReport{}, &csvValidationError{message: "colonne obligatoire manquante: " + col}
+		}
+	}
+
+	for idx, record := range records[1:] {
+		line := idx + 2
+		result := ImportRowResult{Line: line, Valid: true}
+
+		dateValue := getCSVValue(record, header["date"])
+		labelValue := getCSVValue(record, header["label"])
+		amountValue := getCSVValue(record, header["amount"])
+		currencyValue := getCSVValue(record, header["currency"])
+
+		if strings.TrimSpace(dateValue) == "" {
+			result.Errors = append(result.Errors, "date obligatoire")
+		} else if _, err := time.Parse("2006-01-02", dateValue); err != nil {
+			result.Errors = append(result.Errors, "date invalide, format attendu YYYY-MM-DD")
+		} else {
+			result.Date = dateValue
+		}
+
+		if strings.TrimSpace(labelValue) == "" {
+			result.Errors = append(result.Errors, "label obligatoire")
+		} else {
+			result.Label = labelValue
+		}
+
+		amount, err := strconv.ParseFloat(strings.ReplaceAll(amountValue, ",", "."), 64)
+		if strings.TrimSpace(amountValue) == "" {
+			result.Errors = append(result.Errors, "amount obligatoire")
+		} else if err != nil {
+			result.Errors = append(result.Errors, "amount invalide")
+		} else {
+			result.Amount = amount
+		}
+
+		if strings.TrimSpace(currencyValue) == "" {
+			result.Errors = append(result.Errors, "currency obligatoire")
+		} else {
+			result.Currency = strings.ToUpper(currencyValue)
+		}
+
+		if len(result.Errors) > 0 {
+			result.Valid = false
+			report.InvalidRows++
+		} else {
+			report.ValidRows++
+		}
+
+		report.Rows = append(report.Rows, result)
+	}
+
+	report.DetectedRows = len(records) - 1
+	return report, nil
+}
+
+type csvValidationError struct {
+	message string
+}
+
+func (e *csvValidationError) Error() string {
+	return e.message
+}
+
+func getCSVValue(record []string, index int) string {
+	if index < 0 || index >= len(record) {
+		return ""
+	}
+	return strings.TrimSpace(record[index])
 }
 
 func recommendationsHandler(w http.ResponseWriter, r *http.Request) {

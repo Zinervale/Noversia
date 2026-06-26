@@ -1,15 +1,12 @@
 # Transaction Import Module
 
-## Responsabilités
+## v3
 
-- Recevoir un fichier CSV
-- Détecter les colonnes
-- Valider les lignes
-- Normaliser les libellés
-- Détecter les doublons
-- Préparer les transactions enrichies
-- Retourner un rapport d'import
+Le parsing CSV réel est implémenté dans le handler.
 
-## Statut v2
+## Refactorisation prévue
 
-Endpoint mocké, parsing réel à venir.
+Déplacer la logique dans :
+- `parser.go`
+- `validator.go`
+- `import_service.go`

@@ -2,14 +2,6 @@
 
 Toutes les routes publiques sont sous `/api/v1`.
 
-## Format erreur
+## Erreurs
 
-```json
-{
-  "error": {
-    "code": "RESOURCE_NOT_FOUND",
-    "message": "Ressource introuvable",
-    "correlationId": "..."
-  }
-}
-```
+Les erreurs sont retournées dans un format JSON commun.

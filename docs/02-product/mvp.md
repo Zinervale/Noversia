@@ -1,21 +1,13 @@
 # MVP Noversia Financial
 
-## Inclus v2
+## Inclus v3
 
-- Health check API
-- Service IA minimal
-- Comptes mockés
+- API Go
+- Service IA Python
 - Transactions mockées
-- Import CSV simulé
-- OpenAPI
-- Documentation
-- Backlog initial
+- Parsing CSV réel
+- Rapport d'import ligne par ligne
 
 ## Prochaine étape
 
-Rendre l'import CSV réel :
-- parsing ;
-- validation ;
-- mapping colonnes ;
-- détection doublons ;
-- écriture PostgreSQL.
+Écriture en base PostgreSQL.

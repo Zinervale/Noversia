@@ -1,15 +1,13 @@
 # Backend Go
 
-## Structure
+## v3
+
+Ajout du parsing CSV réel directement dans le handler d'import.
+
+## Prochaine refactorisation
+
+Déplacer le parsing dans un service dédié :
 
 ```text
-services/api/
-  cmd/api
-  internal/modules/accounts
-  internal/modules/transactions
-  internal/modules/recommendations
+internal/modules/transactions/importer.go
 ```
-
-## Décision
-
-Le backend reste volontairement simple pour accélérer le MVP.

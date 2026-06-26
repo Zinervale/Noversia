@@ -1,45 +1,30 @@
 # Import CSV bancaire
 
-## Objectif
+## Format attendu v3
 
-Permettre à l'utilisateur d'importer ses transactions sans connecter immédiatement sa banque.
+Le CSV doit contenir les colonnes suivantes :
 
-## Pourquoi commencer par le CSV ?
-
-- Réduit les contraintes réglementaires initiales.
-- Permet de tester la valeur produit rapidement.
-- Évite une dépendance immédiate à un agrégateur Open Banking.
-- Permet d'alimenter rapidement le moteur IA avec un historique réel.
-
-## Flux cible
-
-```mermaid
-flowchart TD
-    A[Upload CSV] --> B[Détection colonnes]
-    B --> C[Aperçu utilisateur]
-    C --> D[Validation]
-    D --> E[Parsing]
-    E --> F[Détection doublons]
-    F --> G[Normalisation libellés]
-    G --> H[Catégorisation]
-    H --> I[Insertion transactions]
+```csv
+date,label,amount,currency
+2026-06-25,CARREFOUR MARKET,-82.31,EUR
 ```
-
-## Colonnes minimales
-
-- date
-- label
-- amount
-- currency
 
 ## Règles de validation
 
-- Une date est obligatoire.
-- Un libellé est obligatoire.
-- Un montant est obligatoire.
-- Une devise est recommandée, EUR par défaut.
-- Les lignes invalides ne bloquent pas forcément tout l'import : elles sont retournées en erreur ligne par ligne.
+- `date` obligatoire au format `YYYY-MM-DD`.
+- `label` obligatoire.
+- `amount` obligatoire et numérique.
+- `currency` obligatoire, 3 caractères recommandés.
 
-## Statut v2
+## Réponse API
 
-Le endpoint existe mais le parsing est simulé.
+Le système retourne :
+
+- nombre de lignes détectées ;
+- nombre de lignes valides ;
+- nombre de lignes invalides ;
+- détail ligne par ligne.
+
+## Limite v3
+
+Les transactions ne sont pas encore écrites en base.

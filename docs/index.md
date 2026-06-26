@@ -1,9 +1,5 @@
 # Noversia Platform
 
-Documentation de conception et d'exécution.
+Version v3 — Real CSV Parsing.
 
-## Version actuelle
-
-v2 — Transaction Import Foundation
-
-Cette version prépare le premier vrai flux métier : l'import de transactions bancaires.
+Cette version ajoute le premier traitement métier réel : lecture, parsing et validation d'un CSV bancaire.

@@ -1,21 +1,23 @@
 # Changelog
 
-## v2 — Transaction Import Foundation
+## v3 — Real CSV Parsing
 
 ### Ajouté
 
-- `GIT_COMMIT_MESSAGE.md` avec le message Git prêt à copier.
-- Exemple `samples/bank-transactions-sample.csv`.
-- Endpoint `POST /api/v1/transactions/import`.
-- Structure métier initiale pour l'import CSV.
-- Documentation de l'import bancaire.
-- OpenAPI v0.3.
+- Parsing CSV réel côté Go.
+- Validation des colonnes `date`, `label`, `amount`, `currency`.
+- Rapport d'import ligne par ligne.
+- Comptage des lignes valides et invalides.
+- Exemple CSV avec une ligne invalide pour tester les erreurs.
+- Documentation d'import CSV enrichie.
 
 ### Modifié
 
-- README enrichi avec commandes de test.
-- Roadmap mise à jour.
+- L'archive ne contient plus `GIT_COMMIT_MESSAGE.md`.
+- OpenAPI passe en v0.4.
 
-### Note
+### Prochaine étape
 
-L'import CSV est encore simulé côté API. La prochaine étape sera le parsing réel, la validation ligne par ligne et l'écriture en base.
+- Persistance PostgreSQL des transactions importées.
+- Création d'une table `import_batches`.
+- Détection de doublons.

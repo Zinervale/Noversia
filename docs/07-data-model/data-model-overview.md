@@ -1,6 +1,6 @@
 # Modèle de données initial
 
-Tables v1 :
+Tables :
 - users
 - accounts
 - merchants
@@ -9,7 +9,7 @@ Tables v1 :
 - recommendations
 - audit_logs
 
-Extension future :
+À venir :
 - import_batches
 - import_rows
 - transaction_enrichments

@@ -1,9 +1,11 @@
 # EPIC-002 — Transactions
 
-## Objectif
-
-Permettre l'import, la consultation et l'enrichissement des transactions.
-
 ## Statut
 
-Démarré en v2.
+En cours.
+
+## Réalisé
+
+- Endpoint import CSV.
+- Parsing CSV.
+- Validation ligne par ligne.

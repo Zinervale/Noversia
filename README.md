@@ -2,24 +2,14 @@
 
 Plateforme d'intelligence financière personnelle.
 
-## Nouveautés v2
+## Nouveautés v3
 
-- Ajout du `CHANGELOG.md`
-- Ajout du `GIT_COMMIT_MESSAGE.md`
-- Ajout d'un exemple CSV bancaire
-- Ajout d'un endpoint d'import CSV simulé
-- Ajout d'une documentation fonctionnelle de l'import
-- Ajout d'une structure métier Transaction Import
-
-## Stack
-
-- Backend Core : Go
-- Service IA : Python / FastAPI
-- Base métier : PostgreSQL
-- Cache : Redis
-- Graphe : Neo4j
-- Documentation : MkDocs
-- API : REST + OpenAPI
+- Parsing CSV réel côté API Go.
+- Rapport d'import ligne par ligne.
+- Validation des colonnes obligatoires.
+- Validation des montants et dates.
+- Détection basique des lignes invalides.
+- Suppression du fichier `GIT_COMMIT_MESSAGE.md` de l'archive.
 
 ## Lancement local
 
@@ -30,11 +20,9 @@ make api
 make ai
 ```
 
-## Test rapide API
+## Test import CSV
 
 ```bash
-curl http://localhost:8080/api/v1/health
-curl http://localhost:8080/api/v1/transactions
 curl -X POST http://localhost:8080/api/v1/transactions/import \
   -H "Content-Type: multipart/form-data" \
   -F "file=@samples/bank-transactions-sample.csv"

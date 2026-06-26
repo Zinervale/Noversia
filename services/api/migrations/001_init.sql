@@ -65,7 +65,3 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     metadata JSONB NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-
-INSERT INTO users (email, display_name)
-VALUES ('demo@noversia.com', 'Demo Noversia')
-ON CONFLICT (email) DO NOTHING;

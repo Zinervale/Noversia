@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noversia API
-  version: 0.3.0
+  version: 0.4.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
@@ -17,11 +17,6 @@ paths:
       responses:
         "200":
           description: Liste des comptes
-    post:
-      summary: Crée un compte manuel
-      responses:
-        "201":
-          description: Compte créé
   /transactions:
     get:
       summary: Liste les transactions
@@ -30,7 +25,7 @@ paths:
           description: Liste des transactions
   /transactions/import:
     post:
-      summary: Importe un fichier CSV bancaire
+      summary: Importe et valide un fichier CSV bancaire
       requestBody:
         required: true
         content:
@@ -43,7 +38,7 @@ paths:
                   format: binary
       responses:
         "202":
-          description: Import accepté
+          description: Rapport d'import
   /recommendations:
     get:
       summary: Liste les recommandations
