@@ -6,6 +6,7 @@
 - Liste des comptes
 - Création compte manuel
 - Liste des transactions
+- Import CSV simulé
 - Liste des recommandations
 
 ## IA

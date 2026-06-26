@@ -2,4 +2,4 @@
 
 Statut : Accepté
 
-Python est retenu pour l'IA afin de bénéficier de l'écosystème LLM/ML.
+Python est retenu pour l'IA.

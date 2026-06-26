@@ -4,11 +4,6 @@
 
 Permettre l'import, la consultation et l'enrichissement des transactions.
 
-## Features
+## Statut
 
-- Import CSV
-- Normalisation
-- Détection marchand
-- Catégorisation
-- Correction manuelle
-- Historique d'enrichissement
+Démarré en v2.

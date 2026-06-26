@@ -1,11 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI(
-    title="Noversia AI Service",
-    version="0.1.0",
-    description="Service IA initial pour Noversia Platform."
-)
+app = FastAPI(title="Noversia AI Service", version="0.1.0")
 
 class AnalyzeRequest(BaseModel):
     message: str

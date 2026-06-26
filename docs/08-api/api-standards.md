@@ -1,5 +1,7 @@
 # Standards API
 
+Toutes les routes publiques sont sous `/api/v1`.
+
 ## Format erreur
 
 ```json
@@ -11,7 +13,3 @@
   }
 }
 ```
-
-## Versionnement
-
-Toutes les routes publiques sont sous `/api/v1`.

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -32,13 +33,13 @@ type Recommendation struct {
 
 func main() {
 	port := getenv("API_PORT", "8080")
-
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/v1/health", healthHandler)
 	mux.HandleFunc("GET /api/v1/accounts", accountsHandler)
 	mux.HandleFunc("POST /api/v1/accounts", createAccountHandler)
 	mux.HandleFunc("GET /api/v1/transactions", transactionsHandler)
+	mux.HandleFunc("POST /api/v1/transactions/import", importTransactionsHandler)
 	mux.HandleFunc("GET /api/v1/recommendations", recommendationsHandler)
 	mux.HandleFunc("POST /api/v1/chat", chatHandler)
 
@@ -49,10 +50,7 @@ func main() {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]any{
-		"status":  "ok",
-		"service": "noversia-api",
-	})
+	writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "service": "noversia-api", "version": "0.2.0"})
 }
 
 func accountsHandler(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +85,37 @@ func transactionsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func importTransactionsHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "INVALID_MULTIPART", "Formulaire multipart invalide")
+		return
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "MISSING_FILE", "Le fichier CSV est obligatoire")
+		return
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "FILE_READ_ERROR", "Impossible de lire le fichier")
+		return
+	}
+
+	writeJSON(w, http.StatusAccepted, map[string]any{
+		"status": "accepted",
+		"filename": header.Filename,
+		"sizeBytes": len(content),
+		"detectedRows": 3,
+		"validRows": 3,
+		"invalidRows": 0,
+		"message": "Import CSV simulé accepté. Le parsing réel sera ajouté en prochaine version.",
+	})
+}
+
 func recommendationsHandler(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, []Recommendation{
 		{
@@ -99,9 +128,7 @@ func recommendationsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
-	var input struct {
-		Message string `json:"message"`
-	}
+	var input struct{ Message string `json:"message"` }
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		writeError(w, http.StatusBadRequest, "INVALID_JSON", "JSON invalide")
 		return
@@ -120,12 +147,7 @@ func writeJSON(w http.ResponseWriter, status int, payload any) {
 }
 
 func writeError(w http.ResponseWriter, status int, code string, message string) {
-	writeJSON(w, status, map[string]any{
-		"error": map[string]string{
-			"code": code,
-			"message": message,
-		},
-	})
+	writeJSON(w, status, map[string]any{"error": map[string]string{"code": code, "message": message}})
 }
 
 func withCORS(next http.Handler) http.Handler {

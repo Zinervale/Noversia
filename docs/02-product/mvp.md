@@ -1,19 +1,21 @@
 # MVP Noversia Financial
 
-## Inclus v1
+## Inclus v2
 
-- Création de compte technique
-- Comptes financiers manuels
-- Transactions
-- Import futur CSV
-- Recommandations simples
-- Chat IA minimal
-- Documentation API
+- Health check API
+- Service IA minimal
+- Comptes mockés
+- Transactions mockées
+- Import CSV simulé
+- OpenAPI
+- Documentation
+- Backlog initial
 
-## Exclu v1
+## Prochaine étape
 
-- Paiement
-- Trading
-- Exécution bancaire
-- Conseil financier réglementé
-- Synchronisation bancaire automatique
+Rendre l'import CSV réel :
+- parsing ;
+- validation ;
+- mapping colonnes ;
+- détection doublons ;
+- écriture PostgreSQL.

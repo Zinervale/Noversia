@@ -11,6 +11,7 @@ nav:
   - Produit:
       - MVP: docs/02-product/mvp.md
       - Fonctionnalités: docs/02-product/features.md
+      - Import CSV: docs/02-product/csv-import.md
   - Architecture:
       - Vue globale: docs/05-architecture/overview.md
       - C4: docs/05-architecture/c4.md

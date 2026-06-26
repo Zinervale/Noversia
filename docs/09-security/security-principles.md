@@ -1,8 +1,5 @@
 # Sécurité
 
-## Principes
-
-- Chiffrement en transit
 - Secrets hors dépôt
 - Logs sans données sensibles
 - Audit des actions importantes

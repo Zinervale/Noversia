@@ -2,16 +2,16 @@
 
 Plateforme d'intelligence financière personnelle.
 
-## Objectif
+## Nouveautés v2
 
-Construire un moteur de décision financière capable de :
-- centraliser des données financières ;
-- analyser les transactions ;
-- produire des recommandations explicables ;
-- simuler des décisions de vie ;
-- dialoguer avec l'utilisateur via une IA maîtrisée.
+- Ajout du `CHANGELOG.md`
+- Ajout du `GIT_COMMIT_MESSAGE.md`
+- Ajout d'un exemple CSV bancaire
+- Ajout d'un endpoint d'import CSV simulé
+- Ajout d'une documentation fonctionnelle de l'import
+- Ajout d'une structure métier Transaction Import
 
-## Stack v1
+## Stack
 
 - Backend Core : Go
 - Service IA : Python / FastAPI
@@ -30,16 +30,12 @@ make api
 make ai
 ```
 
-## Structure
+## Test rapide API
 
-```text
-apps/          Applications clientes
-services/      Services backend et IA
-packages/      Librairies partagées
-docs/          Documentation projet
-adr/           Décisions d'architecture
-openapi/       Contrats API
-backlog/       Backlog produit
-infra/         Infrastructure
-scripts/       Scripts de développement
+```bash
+curl http://localhost:8080/api/v1/health
+curl http://localhost:8080/api/v1/transactions
+curl -X POST http://localhost:8080/api/v1/transactions/import \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@samples/bank-transactions-sample.csv"
 ```

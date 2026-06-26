@@ -2,17 +2,19 @@
 
 ## Sprint 0 — Fondation
 
-Statut : en cours
-
-- Dépôt documentaire
-- Backend Go skeleton
-- Service IA Python skeleton
-- PostgreSQL / Redis / Neo4j
-- OpenAPI
-- Docker Compose
+Statut : terminé en v1
 
 ## Sprint 1 — Transactions
 
-- Import CSV
-- Normalisation
-- Catégorisation par règles
+Statut : démarré en v2
+
+- Import CSV simulé
+- Exemple CSV
+- Documentation import
+- OpenAPI v0.3
+
+## Prochaine version
+
+- Parsing CSV réel
+- Validation ligne par ligne
+- Persistance PostgreSQL

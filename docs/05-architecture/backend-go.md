@@ -5,16 +5,11 @@
 ```text
 services/api/
   cmd/api
-  internal/config
-  internal/http
-  internal/modules
-  internal/platform
+  internal/modules/accounts
+  internal/modules/transactions
+  internal/modules/recommendations
 ```
 
-## Principes
+## Décision
 
-- HTTP standard library pour démarrer simplement
-- Modules métier isolés
-- Pas de dépendance lourde prématurée
-- Migration SQL simple
-- OpenAPI comme contrat externe
+Le backend reste volontairement simple pour accélérer le MVP.
