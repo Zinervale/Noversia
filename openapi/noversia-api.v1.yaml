@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noversia API
-  version: 0.5.0
+  version: 0.6.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
@@ -23,14 +23,6 @@ paths:
   /transactions/import:
     post:
       summary: Importe, valide et persiste un fichier CSV bancaire
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file: { type: string, format: binary }
       responses:
         "202": { description: Rapport d'import }
   /imports/{id}:
@@ -43,13 +35,3 @@ paths:
           schema: { type: string }
       responses:
         "200": { description: Rapport d'import }
-  /recommendations:
-    get:
-      summary: Liste les recommandations
-      responses:
-        "200": { description: Liste des recommandations }
-  /chat:
-    post:
-      summary: Envoie une question au service IA
-      responses:
-        "200": { description: Réponse IA }

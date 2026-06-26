@@ -1,19 +1,18 @@
-# Modèle de données v4
+# Modèle de données v5
 
-## Nouvelles tables
+Tables principales :
 
-### import_batches
+- users
+- accounts
+- import_batches
+- import_rows
+- transactions
+- merchants
+- categories
+- recommendations
+- audit_logs
 
-Représente un fichier importé.
+À venir :
 
-### import_rows
-
-Représente chaque ligne du fichier avec son statut.
-
-### transactions.source_hash
-
-Empreinte fonctionnelle pour limiter les doublons.
-
-## Principe
-
-Une ligne invalide est conservée dans `import_rows`, mais ne crée pas de transaction.
+- categorization_rules
+- transaction_enrichments

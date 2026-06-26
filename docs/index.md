@@ -1,5 +1,5 @@
 # Noversia Platform
 
-Version v4 — Persist CSV Imports.
+Version v5 — Transactions Module Refactor.
 
-Cette version rend l'import CSV réellement persistant dans PostgreSQL.
+Cette version transforme l'import CSV en vraie brique maintenable du backend.

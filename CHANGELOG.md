@@ -1,23 +1,22 @@
 # Changelog
 
-## v4 — Persist CSV Imports
+## v5 — Transactions Module Refactor
 
 ### Ajouté
 
-- Connexion PostgreSQL depuis le backend Go.
-- Tables `import_batches` et `import_rows`.
-- Persistance des transactions valides.
-- Hash de transaction pour limiter les doublons.
-- Endpoint de consultation d'un import.
-- Lecture des transactions depuis PostgreSQL.
+- Parser CSV isolé dans le module transactions.
+- Repository PostgreSQL dédié.
+- Service d'import dédié.
+- Handler HTTP dédié.
+- Tests unitaires du parser CSV.
+- Documentation de dette technique réduite.
 
 ### Modifié
 
-- `GET /transactions` ne retourne plus uniquement des données mockées.
-- OpenAPI passe en v0.5.
+- `cmd/api/main.go` ne contient plus la logique transaction.
+- OpenAPI passe en v0.6.
 
 ### Prochaine étape
 
-- Refactoriser le handler en couche service/repository.
-- Ajouter des tests unitaires sur le parser CSV.
-- Ajouter la catégorisation par règles.
+- Catégorisation automatique par règles.
+- Tables `categorization_rules` et `transaction_enrichments`.

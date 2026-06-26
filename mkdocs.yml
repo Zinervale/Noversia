@@ -5,11 +5,10 @@ theme:
 nav:
   - Accueil: docs/index.md
   - Produit:
-      - MVP: docs/02-product/mvp.md
       - Import CSV: docs/02-product/csv-import.md
   - Architecture:
-      - Vue globale: docs/05-architecture/overview.md
       - Backend Go: docs/05-architecture/backend-go.md
+      - Module Transactions: docs/05-architecture/transactions-module.md
   - Données:
       - Modèle initial: docs/07-data-model/data-model-overview.md
   - API:

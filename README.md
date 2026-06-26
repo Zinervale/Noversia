@@ -1,18 +1,20 @@
 # Noversia Platform
 
-Plateforme d'intelligence financière personnelle.
+## v5 — Transactions Module Refactor
 
-## Nouveautés v4
+Cette version refactorise le module transaction pour sortir la logique métier de `main.go`.
 
-- Connexion PostgreSQL réelle côté API Go.
-- Création des tables `import_batches` et `import_rows`.
-- Persistance des transactions valides importées par CSV.
-- Détection simple des doublons via empreinte `source_hash`.
-- Endpoint `GET /api/v1/imports/{id}` pour consulter un rapport d'import.
-- Endpoint `GET /api/v1/transactions` connecté à PostgreSQL.
-- OpenAPI v0.5.
+## Nouveautés
 
-## Lancement local
+- `parser.go` : parsing et validation CSV.
+- `repository.go` : accès PostgreSQL.
+- `service.go` : orchestration import.
+- `handler.go` : endpoints HTTP.
+- Tests unitaires sur le parser CSV.
+- Documentation architecture mise à jour.
+- Préparation de la catégorisation par règles.
+
+## Lancement
 
 ```bash
 cp .env.example .env
@@ -21,12 +23,8 @@ make api
 make ai
 ```
 
-## Test
+## Tests
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/transactions/import \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@samples/bank-transactions-sample.csv"
-
-curl http://localhost:8080/api/v1/transactions
+make test
 ```

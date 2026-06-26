@@ -1,18 +1,20 @@
 # Backend Go
 
-## v4
+## Structure v5
 
-Le backend Go se connecte réellement à PostgreSQL via `database/sql` et le driver `pgx`.
+```text
+cmd/api/main.go
+internal/modules/transactions/
+  handler.go
+  service.go
+  repository.go
+  parser.go
+  models.go
+  parser_test.go
+```
 
-## Dette technique acceptée
+## Principe
 
-La logique d'import reste dans `main.go` pour accélérer.
+`main.go` câble les dépendances.
 
-## Refactorisation v5
-
-Extraire :
-
-- parser CSV ;
-- repository transaction ;
-- service import ;
-- handler HTTP.
+Les modules portent la logique métier.
