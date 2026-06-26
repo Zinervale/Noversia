@@ -1,18 +1,20 @@
-# Modèle de données v5
+# Modèle de données v6
 
-Tables principales :
+## Nouvelles structures
 
-- users
-- accounts
-- import_batches
-- import_rows
-- transactions
-- merchants
-- categories
-- recommendations
-- audit_logs
+### categorization_rules
 
-À venir :
+Permet de classer automatiquement une transaction.
 
-- categorization_rules
-- transaction_enrichments
+Colonnes principales :
+
+- pattern
+- match_type
+- category_id
+- priority
+- confidence_score
+- enabled
+
+## Principe
+
+Les règles sont explicables et peuvent être affichées à l'utilisateur.

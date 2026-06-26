@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noversia API
-  version: 0.6.0
+  version: 0.7.0
 servers:
   - url: http://localhost:8080/api/v1
 paths:
@@ -10,11 +10,20 @@ paths:
       summary: Health check API
       responses:
         "200": { description: OK }
-  /accounts:
+  /categories:
     get:
-      summary: Liste les comptes
+      summary: Liste les catégories
       responses:
-        "200": { description: Liste des comptes }
+        "200": { description: Liste des catégories }
+  /categorization-rules:
+    get:
+      summary: Liste les règles de catégorisation
+      responses:
+        "200": { description: Liste des règles }
+    post:
+      summary: Crée une règle de catégorisation
+      responses:
+        "201": { description: Règle créée }
   /transactions:
     get:
       summary: Liste les transactions persistées
@@ -22,16 +31,11 @@ paths:
         "200": { description: Liste des transactions }
   /transactions/import:
     post:
-      summary: Importe, valide et persiste un fichier CSV bancaire
+      summary: Importe, catégorise et persiste un fichier CSV bancaire
       responses:
         "202": { description: Rapport d'import }
   /imports/{id}:
     get:
       summary: Consulte un rapport d'import
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: string }
       responses:
         "200": { description: Rapport d'import }

@@ -6,6 +6,7 @@ nav:
   - Accueil: docs/index.md
   - Produit:
       - Import CSV: docs/02-product/csv-import.md
+      - Catégorisation: docs/02-product/categorization.md
   - Architecture:
       - Backend Go: docs/05-architecture/backend-go.md
       - Module Transactions: docs/05-architecture/transactions-module.md

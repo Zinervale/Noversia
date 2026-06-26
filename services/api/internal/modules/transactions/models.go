@@ -6,6 +6,8 @@ type Transaction struct {
 	Amount   float64 `json:"amount"`
 	Currency string  `json:"currency"`
 	Date     string  `json:"date"`
+	CategoryID string `json:"categoryId,omitempty"`
+	CategoryName string `json:"categoryName,omitempty"`
 }
 
 type ImportRowResult struct {
@@ -15,6 +17,9 @@ type ImportRowResult struct {
 	Label         string   `json:"label,omitempty"`
 	Amount        float64  `json:"amount,omitempty"`
 	Currency      string   `json:"currency,omitempty"`
+	CategoryID    string   `json:"categoryId,omitempty"`
+	CategoryName  string   `json:"categoryName,omitempty"`
+	ConfidenceScore float64 `json:"confidenceScore,omitempty"`
 	Errors        []string `json:"errors,omitempty"`
 	TransactionID string   `json:"transactionId,omitempty"`
 	Duplicate     bool     `json:"duplicate,omitempty"`
@@ -28,4 +33,20 @@ type ImportReport struct {
 	ValidRows    int              `json:"validRows"`
 	InvalidRows  int              `json:"invalidRows"`
 	Rows         []ImportRowResult `json:"rows"`
+}
+
+type Category struct {
+	ID string `json:"id"`
+	Name string `json:"name"`
+}
+
+type CategorizationRule struct {
+	ID string `json:"id"`
+	Pattern string `json:"pattern"`
+	MatchType string `json:"matchType"`
+	CategoryID string `json:"categoryId"`
+	CategoryName string `json:"categoryName,omitempty"`
+	Priority int `json:"priority"`
+	ConfidenceScore float64 `json:"confidenceScore"`
+	Enabled bool `json:"enabled"`
 }

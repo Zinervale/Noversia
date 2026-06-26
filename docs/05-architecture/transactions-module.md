@@ -1,28 +1,21 @@
 # Module Transactions
 
-## Responsabilités
+## v6
 
-- Lire les transactions.
-- Importer un CSV.
-- Valider les lignes.
-- Persister les transactions.
-- Historiser les lignes invalides.
-- Éviter les doublons simples.
+Nouveaux composants :
 
-## Interfaces
+- `categorizer.go`
+- `CategorizationRule`
+- application des règles avant persistance
 
-### Parser
+## Flux
 
-Transforme un fichier CSV en `ImportReport`.
-
-### Service
-
-Orchestre le parsing et la persistance.
-
-### Repository
-
-Accède à PostgreSQL.
-
-### Handler
-
-Expose les routes HTTP.
+```mermaid
+flowchart TD
+    A[Transaction valide] --> B[Normalisation libellé]
+    B --> C[Recherche règle]
+    C --> D[Catégorie trouvée]
+    C --> E[Aucune règle]
+    D --> F[Insertion avec category_id]
+    E --> G[Insertion sans catégorie]
+```

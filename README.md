@@ -1,18 +1,18 @@
 # Noversia Platform
 
-## v5 — Transactions Module Refactor
+## v6 — Rule-Based Categorization
 
-Cette version refactorise le module transaction pour sortir la logique métier de `main.go`.
+Cette version ajoute la première brique d'intelligence déterministe : la catégorisation automatique par règles.
 
 ## Nouveautés
 
-- `parser.go` : parsing et validation CSV.
-- `repository.go` : accès PostgreSQL.
-- `service.go` : orchestration import.
-- `handler.go` : endpoints HTTP.
-- Tests unitaires sur le parser CSV.
-- Documentation architecture mise à jour.
-- Préparation de la catégorisation par règles.
+- Tables `categorization_rules` et catégories seedées.
+- Catégorisation automatique à l'import CSV.
+- Endpoint `GET /api/v1/categories`.
+- Endpoint `GET /api/v1/categorization-rules`.
+- Endpoint `POST /api/v1/categorization-rules`.
+- Tests unitaires du moteur de catégorisation.
+- Documentation fonctionnelle et technique.
 
 ## Lancement
 
@@ -20,11 +20,5 @@ Cette version refactorise le module transaction pour sortir la logique métier d
 cp .env.example .env
 docker compose up -d
 make api
-make ai
-```
-
-## Tests
-
-```bash
 make test
 ```

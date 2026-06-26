@@ -1,11 +1,11 @@
 # Roadmap
 
-## v5
-
-- Refactorisation module transaction.
-- Tests parser CSV.
-
 ## v6
 
 - Catégorisation par règles.
-- Enrichissement transaction.
+
+## v7
+
+- Correction manuelle d'une catégorie.
+- Historique des changements.
+- Suggestion automatique de règle.

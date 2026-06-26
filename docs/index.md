@@ -1,5 +1,5 @@
 # Noversia Platform
 
-Version v5 — Transactions Module Refactor.
+Version v6 — Rule-Based Categorization.
 
-Cette version transforme l'import CSV en vraie brique maintenable du backend.
+Cette version ajoute la catégorisation automatique déterministe des transactions.

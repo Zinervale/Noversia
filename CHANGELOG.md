@@ -1,22 +1,23 @@
 # Changelog
 
-## v5 — Transactions Module Refactor
+## v6 — Rule-Based Categorization
 
 ### Ajouté
 
-- Parser CSV isolé dans le module transactions.
-- Repository PostgreSQL dédié.
-- Service d'import dédié.
-- Handler HTTP dédié.
-- Tests unitaires du parser CSV.
-- Documentation de dette technique réduite.
+- Moteur de catégorisation déterministe.
+- Table `categorization_rules`.
+- Catégories par défaut.
+- Application des règles pendant l'import CSV.
+- Endpoints de lecture/création des règles.
+- Tests unitaires sur le matching de règles.
 
 ### Modifié
 
-- `cmd/api/main.go` ne contient plus la logique transaction.
-- OpenAPI passe en v0.6.
+- Les transactions importées peuvent désormais recevoir une catégorie automatiquement.
+- OpenAPI passe en v0.7.
 
 ### Prochaine étape
 
-- Catégorisation automatique par règles.
-- Tables `categorization_rules` et `transaction_enrichments`.
+- Correction manuelle d'une catégorie.
+- Création automatique d'une règle après corrections répétées.
+- Enrichissement marchand.

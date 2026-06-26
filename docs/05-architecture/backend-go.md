@@ -1,20 +1,9 @@
 # Backend Go
 
-## Structure v5
+## v6
+
+Le module transactions utilise maintenant un moteur de catégorisation.
 
 ```text
-cmd/api/main.go
-internal/modules/transactions/
-  handler.go
-  service.go
-  repository.go
-  parser.go
-  models.go
-  parser_test.go
+CSV Parser -> Import Service -> Categorization Engine -> Repository
 ```
-
-## Principe
-
-`main.go` câble les dépendances.
-
-Les modules portent la logique métier.

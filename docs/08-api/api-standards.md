@@ -1,9 +1,7 @@
 # Standards API
 
-Routes v5 :
+Routes v6 :
 
-- `GET /api/v1/health`
-- `GET /api/v1/accounts`
-- `GET /api/v1/transactions`
-- `POST /api/v1/transactions/import`
-- `GET /api/v1/imports/{id}`
+- `GET /api/v1/categories`
+- `GET /api/v1/categorization-rules`
+- `POST /api/v1/categorization-rules`

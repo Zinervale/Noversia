@@ -19,7 +19,7 @@ def health():
 @app.post("/analyze", response_model=AnalyzeResponse)
 def analyze(request: AnalyzeRequest):
     return AnalyzeResponse(
-        answer="Analyse IA simulée : les données fournies ne suffisent pas encore pour produire une recommandation définitive.",
+        answer="Analyse IA simulée.",
         confidence_score=0.42,
         source="mock"
     )

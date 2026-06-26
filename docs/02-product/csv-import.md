@@ -1,20 +1,7 @@
 # Import CSV bancaire
 
-## v5
+## v6
 
-Le flux d'import est maintenant découpé :
+Pendant l'import, chaque transaction valide passe dans le moteur de catégorisation.
 
-```mermaid
-flowchart TD
-    H[HTTP Handler] --> S[Import Service]
-    S --> P[CSV Parser]
-    S --> R[Transaction Repository]
-    R --> DB[(PostgreSQL)]
-```
-
-## Bénéfices
-
-- Testabilité.
-- Lisibilité.
-- Préparation à plusieurs formats bancaires.
-- Préparation aux règles de catégorisation.
+Si une règle correspond au libellé, la transaction reçoit automatiquement une catégorie.

@@ -17,17 +17,28 @@ CREATE TABLE IF NOT EXISTS accounts (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE,
+    parent_id UUID REFERENCES categories(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS categorization_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    pattern TEXT NOT NULL,
+    match_type TEXT NOT NULL DEFAULT 'contains',
+    category_id UUID NOT NULL REFERENCES categories(id),
+    priority INT NOT NULL DEFAULT 100,
+    confidence_score NUMERIC(5,2) NOT NULL DEFAULT 0.90,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS merchants (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     normalized_name TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS categories (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    parent_id UUID REFERENCES categories(id),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -99,3 +110,23 @@ SELECT id, 'Compte courant demo', 'checking', 'EUR', 0
 FROM users
 WHERE email = 'demo@noversia.com'
 AND NOT EXISTS (SELECT 1 FROM accounts WHERE name = 'Compte courant demo');
+
+INSERT INTO categories (name) VALUES
+('Courses'), ('Revenus'), ('Abonnements'), ('Transport'), ('Autres')
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO categorization_rules (pattern, category_id, priority, confidence_score)
+SELECT 'CARREFOUR', id, 10, 0.95 FROM categories WHERE name = 'Courses'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO categorization_rules (pattern, category_id, priority, confidence_score)
+SELECT 'NETFLIX', id, 10, 0.95 FROM categories WHERE name = 'Abonnements'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO categorization_rules (pattern, category_id, priority, confidence_score)
+SELECT 'SALAIRE', id, 10, 0.99 FROM categories WHERE name = 'Revenus'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO categorization_rules (pattern, category_id, priority, confidence_score)
+SELECT 'TOTAL', id, 20, 0.90 FROM categories WHERE name = 'Transport'
+ON CONFLICT DO NOTHING;
